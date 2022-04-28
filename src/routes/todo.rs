@@ -1,3 +1,4 @@
+use actix_web::http::StatusCode;
 use std::fmt::Debug;
 use actix_web::{post, HttpResponse, ResponseError};
 use crate::services::todo_service::{TodoService, TodoServiceError};
@@ -25,7 +26,11 @@ impl Debug for WebError {
     }
 }
 
-impl ResponseError for WebError {}
+impl ResponseError for WebError {
+    fn status_code(&self) -> StatusCode {
+        StatusCode::INTERNAL_SERVER_ERROR
+    }
+}
 
 fn error_chain_format(e: &impl std::error::Error, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     writeln!(f, "{}'n", e)?;
